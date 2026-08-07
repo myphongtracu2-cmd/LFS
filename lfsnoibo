@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổ Hợp Nội Bộ - Trang Chủ</title>
+    <!-- FontAwesome Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #064e3b;
+            --primary-light: #059669;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding-bottom: 75px;
+        }
+
+        /* Top Header */
+        .top-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-header .brand {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Banner */
+        .hero-banner {
+            background: linear-gradient(135deg, #064e3b, #10b981);
+            color: white;
+            margin: 12px;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-banner h2 { font-size: 20px; margin-bottom: 4px; }
+        .hero-banner p { font-size: 12px; opacity: 0.9; }
+
+        /* Profile Card */
+        .profile-card {
+            background: var(--card-bg);
+            margin: 12px;
+            padding: 16px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .user-info h3 {
+            font-size: 18px;
+            color: #000;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .user-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Salary Card */
+        .salary-card {
+            background: var(--card-bg);
+            margin: 12px;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .salary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .salary-amount {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Notifications */
+        .section-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--text-muted);
+            margin: 16px 12px 8px;
+            text-transform: uppercase;
+        }
+
+        .notice-card {
+            background: var(--card-bg);
+            margin: 12px;
+            padding: 16px;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-light);
+        }
+
+        .tag {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-header">
+        <div class="brand">Tổ Hợp Nội Bộ</div>
+        <i class="fa-regular fa-moon" style="font-size: 20px;"></i>
+    </div>
+
+    <div class="hero-banner">
+        <h2>TỔ HỢP MỸ PHONG</h2>
+        <p>HỆ THỐNG THÔNG TIN NỘI BỘ</p>
+    </div>
+
+    <div class="profile-card">
+        <div class="user-info">
+            <p>Xin chào 👋</p>
+            <h3 id="userName">THẠCH THỊ HƠN</h3>
+            <p id="userCode">MSNV: 712505012</p>
+        </div>
+        <i class="fa-solid fa-user-gear" style="font-size: 28px; color: var(--primary-color);"></i>
+    </div>
+
+    <div class="salary-card">
+        <div class="salary-header">
+            <span style="color: var(--text-muted); font-size: 14px;">Thực lãnh kỳ gần nhất</span>
+            <i class="fa-solid fa-eye-slash" id="toggleSalary" style="cursor: pointer;" onclick="toggleSalary()"></i>
+        </div>
+        <div class="salary-amount" id="salaryDisplay">● ● ● ● ● ● ● ●</div>
+        <button class="btn-primary" onclick="viewDetails()">Xem chi tiết bảng lương</button>
+    </div>
+
+    <div class="section-title">Thông báo mới nhất</div>
+    <div class="notice-card">
+        <span class="tag">Thông báo</span>
+        <h4 style="margin-top: 6px;">TRỢ CẤP TAY NGHỀ KỸ THUẬT CAO</h4>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Cập nhật chính sách trợ cấp mới cho kỹ thuật viên...</p>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i>Trang chủ</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-wallet"></i>Lương</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-bell"></i>Thông báo</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-comment-dots"></i>Phản ánh</a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-user"></i>Cá nhân</a>
+    </nav>
+
+    <script>
+        let isHidden = true;
+        const realSalary = "8.450.000 VNĐ";
+
+        function toggleSalary() {
+            const display = document.getElementById("salaryDisplay");
+            const icon = document.getElementById("toggleSalary");
+            if (isHidden) {
+                display.innerText = realSalary;
+                icon.className = "fa-solid fa-eye";
+            } else {
+                display.innerText = "● ● ● ● ● ● ● ●";
+                icon.className = "fa-solid fa-eye-slash";
+            }
+            isHidden = !isHidden;
+        }
+
+        function viewDetails() {
+            alert("Đang chuyển hướng tới chi tiết phiếu lương...");
+        }
+    </script>
+</body>
+</html>
