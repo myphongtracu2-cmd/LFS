@@ -60,6 +60,36 @@
         .hero-banner h2 { font-size: 20px; margin-bottom: 4px; }
         .hero-banner p { font-size: 12px; opacity: 0.9; }
 
+        /* Search Box */
+        .search-card {
+            background: var(--card-bg);
+            margin: 12px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            display: flex;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .search-card input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-card button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         /* Profile Card */
         .profile-card {
             background: var(--card-bg);
@@ -174,6 +204,62 @@
             color: var(--primary-light);
             font-weight: bold;
         }
+
+        /* Modal Chi Tiết Lương */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .detail-row.total {
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+
+        .btn-close {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -186,6 +272,12 @@
     <div class="hero-banner">
         <h2>TỔ HỢP MỸ PHONG</h2>
         <p>HỆ THỐNG THÔNG TIN NỘI BỘ</p>
+    </div>
+
+    <!-- Thanh tìm kiếm MSNV -->
+    <div class="search-card">
+        <input type="text" id="msnvInput" placeholder="Nhập MSNV cần tra cứu..." value="712505012">
+        <button onclick="searchEmployee()">Tra cứu</button>
     </div>
 
     <div class="profile-card">
@@ -213,6 +305,41 @@
         <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Cập nhật chính sách trợ cấp mới cho kỹ thuật viên...</p>
     </div>
 
+    <!-- Modal Chi tiết Phiếu Lương -->
+    <div class="modal" id="salaryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Chi Tiết Phiếu Lương</h3>
+                <i class="fa-solid fa-xmark" style="cursor: pointer;" onclick="closeModal()"></i>
+            </div>
+            <div class="detail-row">
+                <span>Họ và tên:</span>
+                <strong id="modalName">-</strong>
+            </div>
+            <div class="detail-row">
+                <span>MSNV:</span>
+                <strong id="modalCode">-</strong>
+            </div>
+            <div class="detail-row">
+                <span>Lương cơ bản:</span>
+                <span>5.000.000 VNĐ</span>
+            </div>
+            <div class="detail-row">
+                <span>Trợ cấp tay nghề:</span>
+                <span>1.200.000 VNĐ</span>
+            </div>
+            <div class="detail-row">
+                <span>Tăng ca / Phụ cấp khác:</span>
+                <span>2.250.000 VNĐ</span>
+            </div>
+            <div class="detail-row.total detail-row">
+                <span>Thực lãnh:</span>
+                <strong id="modalTotal">0 VNĐ</strong>
+            </div>
+            <button class="btn-close" onclick="closeModal()">Đóng</button>
+        </div>
+    </div>
+
     <nav class="bottom-nav">
         <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i>Trang chủ</a>
         <a href="#" class="nav-item"><i class="fa-solid fa-wallet"></i>Lương</a>
@@ -222,22 +349,30 @@
     </nav>
 
     <script>
-        // Đường dẫn API Render của bạn
         const API_URL = "https://lfs-a3ti.onrender.com";
         
         let isHidden = true;
         let realSalary = "0 VNĐ";
+        let currentEmployee = null;
 
-        // Tự động gọi API lấy thông tin nhân viên từ Server
         async function fetchEmployeeData(msnv) {
             try {
+                document.getElementById("userName").innerText = "Đang tải...";
                 const response = await fetch(`${API_URL}/api/employee/${msnv}`);
                 const result = await response.json();
                 
                 if (result.success) {
+                    currentEmployee = result.data;
                     document.getElementById("userName").innerText = result.data.name;
                     document.getElementById("userCode").innerText = "MSNV: " + result.data.msnv;
                     realSalary = result.data.latestSalary;
+                    
+                    if (!isHidden) {
+                        document.getElementById("salaryDisplay").innerText = realSalary;
+                    }
+                } else {
+                    alert("Không tìm thấy nhân viên với MSNV này!");
+                    document.getElementById("userName").innerText = "Không tìm thấy";
                 }
             } catch (error) {
                 console.error("Lỗi khi kết nối với máy chủ API:", error);
@@ -245,7 +380,13 @@
             }
         }
 
-        // Gọi hàm lấy dữ liệu cho nhân viên mặc định khi mở ứng dụng
+        function searchEmployee() {
+            const msnv = document.getElementById("msnvInput").value.trim();
+            if (msnv) {
+                fetchEmployeeData(msnv);
+            }
+        }
+
         fetchEmployeeData("712505012");
 
         function toggleSalary() {
@@ -262,7 +403,15 @@
         }
 
         function viewDetails() {
-            alert("Đang chuyển hướng tới chi tiết phiếu lương...");
+            if (!currentEmployee) return;
+            document.getElementById("modalName").innerText = currentEmployee.name;
+            document.getElementById("modalCode").innerText = currentEmployee.msnv;
+            document.getElementById("modalTotal").innerText = currentEmployee.latestSalary;
+            document.getElementById("salaryModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("salaryModal").style.display = "none";
         }
     </script>
 </body>
