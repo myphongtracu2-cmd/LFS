@@ -2,10 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-app.use(cors({ origin: '*' }));
+app.use(cors());
 app.use(express.json());
 
-// CSDL giả lập
 const db = {
     employees: {
         "732103415": {
@@ -16,12 +15,16 @@ const db = {
         }
     },
     notifications: [
-        { id: 1, title: "TRỢ CẤP TAY NGHỀ KỸ THUẬT CAO", type: "Thông báo" },
-        { id: 2, title: "Lịch nghỉ lễ Quốc Khánh 02/09", type: "Nội bộ" }
+        { id: 1, title: "TRỢ CẤP TAY NGHỀ KỸ THUẬT CAO", type: "Thông báo" }
     ]
 };
 
-// API lấy dữ liệu nhân viên theo Mã số nhân viên (MSNV)
+// Root route để kiểm tra server live
+app.get('/', (req, res) => {
+    res.send("API Server đang hoạt động!");
+});
+
+// API lấy dữ liệu nhân viên
 app.get('/api/employee/:msnv', (req, res) => {
     const emp = db.employees[req.params.msnv];
     if (emp) {
@@ -31,10 +34,5 @@ app.get('/api/employee/:msnv', (req, res) => {
     }
 });
 
-// API lấy danh sách thông báo
-app.get('/api/notifications', (req, res) => {
-    res.json({ success: true, data: db.notifications });
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server đang chạy tại cổng ${PORT}`));
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
