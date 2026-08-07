@@ -191,8 +191,8 @@
     <div class="profile-card">
         <div class="user-info">
             <p>Xin chào 👋</p>
-            <h3 id="userName">THẠCH THỊ HƠN</h3>
-            <p id="userCode">MSNV: 712505012</p>
+            <h3 id="userName">Đang tải...</h3>
+            <p id="userCode">MSNV: ...</p>
         </div>
         <i class="fa-solid fa-user-gear" style="font-size: 28px; color: var(--primary-color);"></i>
     </div>
@@ -222,8 +222,31 @@
     </nav>
 
     <script>
+        // Đường dẫn API Render của bạn
+        const API_URL = "https://lfs-a3ti.onrender.com";
+        
         let isHidden = true;
-        const realSalary = "8.450.000 VNĐ";
+        let realSalary = "0 VNĐ";
+
+        // Tự động gọi API lấy thông tin nhân viên từ Server
+        async function fetchEmployeeData(msnv) {
+            try {
+                const response = await fetch(`${API_URL}/api/employee/${msnv}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById("userName").innerText = result.data.name;
+                    document.getElementById("userCode").innerText = "MSNV: " + result.data.msnv;
+                    realSalary = result.data.latestSalary;
+                }
+            } catch (error) {
+                console.error("Lỗi khi kết nối với máy chủ API:", error);
+                document.getElementById("userName").innerText = "Lỗi kết nối";
+            }
+        }
+
+        // Gọi hàm lấy dữ liệu cho nhân viên mặc định khi mở ứng dụng
+        fetchEmployeeData("712505012");
 
         function toggleSalary() {
             const display = document.getElementById("salaryDisplay");
