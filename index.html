@@ -390,23 +390,24 @@
 
         async function fetchEmployeeData(msnv) {
             try {
-                    const response = await fetch(`https://<ten-app-cua-ban>.onrender.com/api/employee/${msnv}`);
-                    const result = await response.json();
+                const response = await fetch(`${API_URL}/api/employee/${msnv}`);
+                const result = await response.json();
 
-             // Kiểm tra success và lấy thông tin từ result.data
-                    if (result.success && result.data) {
-                        const emp = result.data;
-                        document.getElementById('emp-name').innerText = emp.name;
-                        document.getElementById('emp-msnv').innerText = emp.msnv;
-                        document.getElementById('emp-salary').innerText = emp.latestSalary;
-                        document.getElementById('emp-dept').innerText = emp.department;
-                    } else {
-            alert(result.message || "Không tìm thấy thông tin nhân viên");
+                if (result.success && result.data) {
+                    const emp = result.data;
+                    currentEmployee = emp;
+                    realSalary = emp.latestSalary;
+
+                    // Cập nhật tên và mã NV đúng với id HTML
+                    if (document.getElementById('userName')) document.getElementById('userName').innerText = emp.name;
+                    if (document.getElementById('userCode')) document.getElementById('userCode').innerText = `MSNV: ${emp.msnv}`;
+                } else {
+                    alert(result.message || "Không tìm thấy thông tin nhân viên");
+                }
+            } catch (error) {
+                console.error("Lỗi kết nối API:", error);
+            }
         }
-                } catch (error) {
-        console.error("Lỗi kết nối:", error);
-    }
-}
 
         fetchEmployeeData("732103415");
 
