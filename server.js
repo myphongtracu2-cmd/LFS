@@ -8,11 +8,11 @@ app.use(express.json());
 // CSDL giả lập
 const db = {
     employees: {
-        "712505012": {
-            name: "THẠCH THỊ HƠN",
-            msnv: "712505012",
-            latestSalary: "8.450.000 VNĐ",
-            department: "Xưởng May 2"
+        "732103415": {
+            name: "THÁO QUANG BẢY",
+            msnv: "732103415",
+            latestSalary: "6.450.000 VNĐ",
+            department: "NV IT"
         }
     },
     notifications: [
